@@ -104,7 +104,7 @@ def difference(b):
     return integral - integral_value
 
 b = newton(difference, 1)
-print("Value of b:", b)
+print("Final time: ", b)
 
 integral = integrate.quad(velocity_poly, 0, b)
 print(integral)
