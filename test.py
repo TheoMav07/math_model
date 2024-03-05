@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.integrate as integrate
+from scipy.optimize import newton
 
 
 def f(x):
@@ -18,6 +19,7 @@ def fd(v):
 
 def avg(x):
     return sum(x) / len(x)
+
 # x = np.linspace(0, 0.5, 500)
 # y = f(x)
 
@@ -34,7 +36,7 @@ vStart = 0.0
 vEnd = 0.0
 J = 0.0
 newJ = []
-m = 0.06
+m = 0.07
 vAvg = [0.0]
 
 # J = integrate.quad(f, 0, 0.5)
@@ -83,9 +85,31 @@ for k in range(1, 30):
 
 
 y = np.array(v)
-x = np.arange(float(len(y))) *0.0005
+x = np.arange(float(len(y))) * 0.0005
 
-plt.plot(x, y)
-plt.show()
+velocity_poly = np.polynomial.polynomial.Polynomial.fit(x, y, len(x))
+# print(lagrange_poly)
 
-print(v[len(v) - 1])
+# plt.scatter(x, y, label='Data')
+# x_values = np.linspace(min(x), max(x), 100)
+# plt.plot(x_values, lagrange_poly(x_values), color='red', label='Polynomial Fit')
+# plt.legend()
+# plt.show()
+
+integral_value = 20
+a = 0
+
+def difference(b):
+    integral, _ = integrate.quad(velocity_poly, a, b)
+    return integral - integral_value
+
+b = newton(difference, 1)
+print("Value of b:", b)
+
+integral = integrate.quad(velocity_poly, 0, b)
+print(integral)
+
+# plt.plot(x, y)
+# plt.show()
+
+# print(v[len(v) - 1])
