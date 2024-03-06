@@ -37,7 +37,7 @@ vEnd = 0.0
 J = 0.0
 newJ = []
 m = 0.07
-vAvg = [0.0]
+# vAvg = [0.0]
 
 # J = integrate.quad(f, 0, 0.5)
 
@@ -49,7 +49,7 @@ for i in range(1, 3000):
     v.append(vEnd)
     fDrag.append(fd(vEnd))
 fThrust.append(f(0.5))
-vAvg.append(avg(v))
+# vAvg.append(avg(v))
 vEnd = 0.0
 vStart = 0.0
 v = []
@@ -68,7 +68,7 @@ for i in range(0, 3*999):
     vStart = vEnd
     fDrag[i] = fd(vEnd)
     v.append(vEnd)
-vAvg.append(avg(v))
+# vAvg.append(avg(v))
 vEnd = 0.0
 vStart = 0.0
 
@@ -79,7 +79,7 @@ for k in range(1, 30):
         vStart = vEnd
         v[i] = vEnd
         fDrag[i] = fd(vEnd)
-    vAvg.append(avg(v))
+    # vAvg.append(avg(v))
     vEnd = 0.0
     vStart = 0.0
 
@@ -87,14 +87,14 @@ for k in range(1, 30):
 y = np.array(v)
 x = np.arange(float(len(y))) * 0.0005
 
-velocity_poly = np.polynomial.polynomial.Polynomial.fit(x, y, len(x))
-# print(lagrange_poly)
+velocity_poly = np.polynomial.polynomial.Polynomial.fit(x, y, 30)
+# print(velocity_poly)
 
-# plt.scatter(x, y, label='Data')
-# x_values = np.linspace(min(x), max(x), 100)
-# plt.plot(x_values, lagrange_poly(x_values), color='red', label='Polynomial Fit')
-# plt.legend()
-# plt.show()
+plt.scatter(x, y, label='Data')
+x_values = np.linspace(min(x), max(x), 500)
+plt.plot(x_values, velocity_poly(x_values), color='red', label='Polynomial Fit')
+plt.legend()
+plt.show()
 
 integral_value = 20
 a = 0
@@ -103,11 +103,15 @@ def difference(b):
     integral, _ = integrate.quad(velocity_poly, a, b)
     return integral - integral_value
 
+print("Mass:", m, "kg")
+
 b = newton(difference, 1)
-print("Final time: ", b)
+print("Final time:", b, "s")
+
+print("Final Velocity:", velocity_poly(b), "m/s")
 
 integral = integrate.quad(velocity_poly, 0, b)
-print(integral)
+print("Distance from start:", integral[0], "m")
 
 # plt.plot(x, y)
 # plt.show()
